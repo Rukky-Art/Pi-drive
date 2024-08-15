@@ -52,7 +52,7 @@ function ImageSliders() {
             </h2>
           </div>
           <div className=" w-full bg-[#2B74B9] text-white 
-            font-bold py-2 px-4 rounded-xl"
+            font-bold py-2 px-4 rounded-xl bg-hover-orange-500"
             style={{
               fontFamily: 'Poppins, sans-serif',
               fontSize: '24px',
@@ -61,9 +61,8 @@ function ImageSliders() {
               textAlign: 'center',
               width: '100%',
             }}>
-
-            Booking
-
+            <Link to="/book">Booking</Link>
+            
           </div>
         </div>
       ))}
