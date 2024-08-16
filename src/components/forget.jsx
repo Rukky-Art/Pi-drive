@@ -18,7 +18,7 @@ function Forget() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer YOUR_AUTH_TOKEN`,
+                    // No authorization header needed for this request
                 },
                 body: JSON.stringify({ email }),
             });
@@ -27,12 +27,12 @@ function Forget() {
                 setIsModalOpen(true); // Show modal if request is successful
             } else {
                 const errorData = await response.json();
-                setError(errorData.message || 'Kindly input your email or Phone Number.');
-                console.error('Error during password reset:', errorData);
+                setError(errorData.message || 'An error occurred. Please try again.');
+                console.error('Error during password reset request:', errorData);
             }
         } catch (error) {
             setError('An error occurred. Please try again later.');
-            console.error('Error during password reset:', error);
+            console.error('Error during password reset request:', error);
         }
     };
 
@@ -54,12 +54,12 @@ function Forget() {
                 ></div>
                 <div className="laptop:w-1/2 flex flex-col justify-center p-8 laptop:h-[600px]">
                     <h2 className="text-lg font-bold text-blue-500 mb-4 text-center">FORGOT PASSWORD</h2>
-                    <h4 className="text-center text-gray-400 font-medium text-xs mb-4">Kindly fill in your email and phone number for verification below</h4>
+                    <h4 className="text-center text-gray-400 font-medium text-xs mb-4">Kindly fill in your email below</h4>
                     <form onSubmit={handleSubmit} className="flex flex-col items-center">
                         <div className="mb-4 w-full">
-                            <label className="block text-gray-700 mb-2" htmlFor="email">Email/Phone Number</label>
+                            <label className="block text-gray-700 mb-2" htmlFor="email">Email</label>
                             <input
-                                type="text"
+                                type="email"
                                 id="email"
                                 value={email}
                                 placeholder="Enter Email"
@@ -72,7 +72,7 @@ function Forget() {
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-20 rounded w-full focus:outline-none focus:shadow-outline"
                             type="submit"
                         >
-                            <span className="text-[#FFFFFF]">Get Verification Code</span>
+                            <span className="text-[#FFFFFF]">Get Token</span>
                         </button>
                         {error && <p className="text-red-600 mt-4">{error}</p>}
                         <div className="mt-2 text-center w-full">
@@ -95,16 +95,14 @@ function Forget() {
                         className="bg-[#2B74B9] text-[#FFFFFF] font-bold py-2 px-4 rounded w-full"
                         onClick={handleOk}
                     >
-                        Verify Pi-Drive Account
+                        Verify Email
                     </button>
                 ]}
             >
-                <p className="text-xs mb-4 text-center text-gray-400">Please enter the 8-digit code sent to your email or phone number</p>
+                <p className="text-xs mb-4 text-center text-gray-400">Please enter the Token sent to your email</p>
                 <input
                     type="text"
                     placeholder="00000000"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 mb-4"
                 />
             </Modal>

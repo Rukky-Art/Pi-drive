@@ -1,33 +1,37 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import image10 from '../assets/images/image10.jpg';
 import { Modal } from 'antd';
+import { useToken } from '../context/TokenContext'; // Adjust the path as needed
 
 function ResetPassword() {
-    const [Token, setToken] = useState('');
+    const [token, setToken] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [error, setError] = useState('');
+    const { authToken } = useToken(); // Access token from context
+    const navigate = useNavigate(); // Hook for programmatic navigation
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        setError('');
+        setError(''); // Reset error state
 
         try {
             const response = await fetch('https://pi-drive-1.onrender.com/reset_password', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkYW1zZWxyYXR0dXNzQGdtYWlsLmNvbSIsImV4cCI6MTcyMzY5MzU4NH0.xa0jToVXgwIn1_q4YOCPi3QKyg1PgiyqIJyOBIJhj1s`,
+                    'Authorization': `Bearer ${authToken}`, // Use token from context
                 },
-                body: JSON.stringify({ newPassword, token: Token }),
+                body: JSON.stringify({ newPassword, token }),
             });
 
             if (response.ok) {
-                setIsModalOpen(true);
+                setIsModalOpen(true); // Show modal if request is successful
             } else {
                 const errorData = await response.json();
                 setError(errorData.message || 'An error occurred. Please try again.');
+                console.error('Error during password reset:', errorData);
             }
         } catch (error) {
             setError('An error occurred. Please try again later.');
@@ -37,7 +41,7 @@ function ResetPassword() {
 
     const handleOk = () => {
         setIsModalOpen(false);
-        // Redirect to sign-in page or handle success
+        navigate('/signin'); // Redirect to sign-in page
     };
 
     const handleCancel = () => {
@@ -56,11 +60,11 @@ function ResetPassword() {
                     <h4 className="text-center text-gray-400 font-medium text-xs mb-4">Enter your new password below</h4>
                     <form onSubmit={handleSubmit} className="flex flex-col items-center">
                         <div className="mb-4 w-full">
-                            <label className="block text-gray-700 mb-2 font-semibold leading-7 text-medium" htmlFor="Token">Input Token</label>
+                            <label className="block text-gray-700 mb-2 font-semibold leading-7 text-medium" htmlFor="token">Input Token</label>
                             <input
                                 type="text"
-                                id="Token"
-                                value={Token}
+                                id="token"
+                                value={token}
                                 placeholder="Enter Token"
                                 onChange={(e) => setToken(e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
@@ -85,8 +89,8 @@ function ResetPassword() {
                         </button>
                         {error && <p className="text-red-600 mt-4">{error}</p>}
                         <div className="mt-2 text-center w-full">
-                            <p className="font-normal leading-7 text-base">Remember Password?
-                                <Link to="/signin" className="text-blue-500 hover:underline">Back to Sign in</Link>
+                            <p className="text-sm">Remember password?
+                                <Link to="/signin" className="text-blue-500 hover:underline"> Back to Sign in</Link>
                             </p>
                         </div>
                     </form>
@@ -104,11 +108,11 @@ function ResetPassword() {
                         className="bg-[#2B74B9] text-[#FFFFFF] font-bold py-2 px-4 rounded w-full"
                         onClick={handleOk}
                     >
-                        Go to Sign In
+                        OK
                     </button>
                 ]}
             >
-                <img src="/pass.png" alt="" className='w-32 h-32 items-center justify-center flex justify-items-center laptop:ml-40 tablet:ml-40 ml-20' />
+                <p className="text-xs mb-4 text-center text-gray-400">Your password has been successfully reset. You can now log in with your new password.</p>
             </Modal>
         </div>
     );

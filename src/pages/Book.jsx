@@ -194,7 +194,7 @@ const Book = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: token ? `Bearer ${token}` : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzYW1AZ21haWwuY29tIiwiZXhwIjoxNzIzNzQ4ODgwfQ.ru90r-QfiOUc99xLR7pturcX7N-Rvo-RGzckH5U-Vuo", // Use the token from the context
+          Authorization: token ? `Bearer ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzYW1AZ21haWwuY29tIiwiZXhwIjoxNzIzNzQ4ODgwfQ.ru90r-QfiOUc99xLR7pturcX7N-Rvo-RGzckH5U-Vuo'}` : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzYW1AZ21haWwuY29tIiwiZXhwIjoxNzIzNzQ4ODgwfQ.ru90r-QfiOUc99xLR7pturcX7N-Rvo-RGzckH5U-Vuo", // Use the token from the context
         },
         body: JSON.stringify(bookingDetails),
       });
