@@ -27,7 +27,7 @@ function Forget() {
                 setIsModalOpen(true); // Show modal if request is successful
             } else {
                 const errorData = await response.json();
-                setError(errorData.message || 'An error occurred. Please try again.');
+                setError(errorData.message || 'Kindly input your email or Phone Number.');
                 console.error('Error during password reset:', errorData);
             }
         } catch (error) {

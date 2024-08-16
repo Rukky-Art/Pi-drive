@@ -3,6 +3,7 @@ import PaymentPopup from '../components/paymentP';
 import PaymentOverlay from '../components/paymentOverlay';
 import Navbar from '../components/Navbar';
 import { useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 function PaymentPage() {
   const { state } = useLocation();
@@ -61,10 +62,12 @@ function PaymentPage() {
         </div>
       </div>
       <div className="mt-5 w-full justify-center space-x-0 tablet:space-x-36 p-4 flex flex-col">
-        <div className="w-full tablet:w-[1000px] laptop:w-[1220px] h-auto rounded-2xl p-4 laptop:flex laptop:flex-row tablet:flex tablet:flex-row tablet:gap-10">
-          <div className="w-[350px] ml-[-10px] laptop:w-[600px] laptop:ml-[90px] bg-[#15499F] rounded-lg overflow-hidden p-4">
+        <div className="w-full tablet:w-[1000px] laptop:w-[1220px] h-auto rounded-2xl p-4 laptop:flex laptop:flex-row tablet:flex tablet:flex-row
+        tablet:gap-10">
+
+          <div className="w-[350px] ml-[-10px] laptop:w-[600px] laptop:ml-[90px] bg-[#15499F]  rounded-lg overflow-hidden p-4">
             <h3 className="text-2xl font-bold leading-7 text-white">Passenger's Details</h3>
-            <table className="min-w-full bg-[#BEDEF5] rounded-lg">
+            <table className="min-w-full bg-[#BEDEF5] rounded-lg ">
               <thead>
                 <tr>
                   <th className="px-1 tablet:px-3 py-1 tablet:py-2 text-left text-xs font-medium text-[#E65425] uppercase">Name</th>
@@ -84,9 +87,11 @@ function PaymentPage() {
             </table>
           </div>
 
-          <div className="w-[350px] ml-[-10px] laptop:w-[600px] bg-[#15499F] rounded-lg overflow-auto p-4 mt-5 laptop:ml-40 laptop:mt-0 tablet:mt-0">
+
+          <div className="w-[350px] ml-[-10px] laptop:w-[600px] bg-[#15499F] rounded-lg overflow-auto p-4 mt-5 laptop:ml-40 
+          laptop:mt-0 tablet:mt-0">
             <h3 className="text-2xl font-bold leading-7 text-white">Price Summary</h3>
-            <table className="min-w-full laptop:w-[375px] bg-[#BEDEF5] rounded-lg">
+            <table className="min-w-full laptop:w-[375px]  bg-[#BEDEF5] rounded-lg">
               <thead>
                 <tr>
                   <th className="px-1 tablet:px-3 py-1 tablet:py-2 text-left text-xs font-medium text-[#E65425] uppercase">Passengers * 2</th>
@@ -103,8 +108,10 @@ function PaymentPage() {
           </div>
         </div>
 
+
         <div className='laptop:flex laptop:flex-row flex flex-col tablet:flex tablet:flex-row tablet:gap-40 tablet:mt-10'>
-          <div className="w-full laptop:w-[450px] tablet:w-[350px] h-auto bg-[#15499F] rounded-lg overflow-auto p-4 mt-0 tablet:mt-5 laptop:h-[150px] laptop:ml-[-40px] laptop:mt-5 tablet:ml-[-140px]">
+          <div className="w-full laptop:w-[450px] tablet:w-[350px] h-auto bg-[#15499F] rounded-lg overflow-auto p-4 mt-0  tablet:mt-5
+        laptop:h-[150px] laptop:ml-[-40px] laptop:mt-5 tablet:ml-[-140px]">
             <h3 className="text-2xl font-bold leading-7 text-white">Contact Details</h3>
             <table className="min-w-full bg-[#BEDEF5] rounded-lg">
               <thead>
@@ -120,18 +127,27 @@ function PaymentPage() {
                 </tr>
               </tbody>
             </table>
+
           </div>
 
-          <div className="flex gap-4 mt-4 justify-end w-full tablet:w-[100px] tablet:ml-24 tablet:gap-5 laptop:h-16 laptop:mr-20 tablet:h-16 laptop:w-[400px]">
-            <button className="bg-[#2B74B9] laptop:p-[16px] min-w-40 laptop:min-w-48 py-2 mr-10 laptop:mr-20 tablet:mr-0 rounded-lg text-white font-poppins text-xl font-semi-bold" onClick={handleMakePaymentClick}>
+          <div className="flex gap-4 mt-4 justify-end  w-full  tablet:w-[100px]  tablet:ml-24 tablet:gap-5 laptop:h-16 laptop:mr-20 tablet:h-16
+          laptop:w-[400px] ">
+            <button className="bg-[#2B74B9] laptop:p-[16px]  min-w-40 laptop:min-w-48 py-2 mr-10 laptop:mr-20 tablet:mr-0 rounded-lg text-white font-poppins text-xl 
+            font-semi-bold " onClick={handleMakePaymentClick}>
               Make Payment
             </button>
-            <button className="bg-[#2B74B9] min-w-40 laptop:min-w-48 py-2 rounded-lg text-white font-poppins text-xl font-semi-bold">
-              Back to Home
-            </button>
+            <NavLink to="/home" className="border-2 border-[#FDB64E] laptop:p-[16px] laptop:pl-14 w-40 mr-3 tablet:m-0 rounded-lg px-10 tablet:px-10 
+            text-orange-500 font-poppins text-xl pt-1 tablet:pt-4 font-bold tablet:mr-0 laptop:min-w-40">Back</NavLink>
+            
           </div>
         </div>
-      </div>
+        <br />
+        <div className='flex items-left justify-left'>
+          <h3 className='text-[#15499F]'> <span><input type="checkbox" className='bg-blue-900' /></span> BY proceeding with the booking,
+            I confirm that I <span className='laptop:flex laptop:flex-col tablet:flex tablet:flex-col '></span> have read and accept the <span className='text-[#E65425]'>terms and conditions
+            </span> and <span className='text-[#E65425]'>Privacy Policy </span></h3>
+        </div>
+        </div>
 
       {isPopupVisible && (
         <PaymentPopup

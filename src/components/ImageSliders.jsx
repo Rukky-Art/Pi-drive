@@ -27,7 +27,8 @@ function ImageSliders() {
       {images.map((image, index) => (
         <div
           key={index}
-          className={`relative w-full tablet:w-1/3 laptop:w-1/3 border border-gray-300 rounded-lg overflow-hidden shadow-lg 
+          className={`relative w-full tablet:w-1/3 laptop:w-1/3 border border-gray-300 rounded-lg overflow-hidden 
+            shadow-lg 
             transition-transform duration-300 ${hoveredIndex === index ? 'scale-105' : 'scale-100'}`}
           onMouseOver={() => handleMouseOver(index)}
           onMouseOut={handleMouseOut}
@@ -35,7 +36,7 @@ function ImageSliders() {
           <img
             src={image.src}
             alt={image.alt}
-            className="w-full"
+            className="w-full h-auto"
           />
           <div className="p-2 bg-white">
             <h2
@@ -51,18 +52,20 @@ function ImageSliders() {
               {image.text}
             </h2>
           </div>
-          <div className=" w-full bg-[#2B74B9] text-white 
-            font-bold py-2 px-4 rounded-xl bg-hover-orange-500"
+          <div
+            className="absolute bottom-0 w-full bg-[#2B74B9] text-white font-bold py-4 px-6 rounded-t-xl 
+            transition-transform duration-300 
+              hover:bg-[#F8981D] flex justify-center"
             style={{
               fontFamily: 'Poppins, sans-serif',
               fontSize: '24px',
               fontWeight: '700',
               lineHeight: '28px',
               textAlign: 'center',
-              width: '100%',
             }}>
-            <Link to="/book">Booking</Link>
-            
+            <Link to="/book" className="w-full flex justify-center items-center">
+              Booking
+            </Link>
           </div>
         </div>
       ))}

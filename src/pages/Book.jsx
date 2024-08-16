@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useToken } from "../hooks/useToken,jsx";
 
+// Price data for different locations
 const prices = {
   apata: {
     bashorun: 500,
@@ -17,12 +19,133 @@ const prices = {
     mokola: 200,
     sango: 300,
   },
-  //... other prices
+  mokola: {
+    bashorun: 500,
+    challenge: 200,
+    gate: 300,
+    "iyana-church": 600,
+    iworoad: 400,
+    "new garage": 200,
+    moniya: 400,
+    dugbe: 350,
+    akobo: 500,
+    olodo: 650,
+    olorunda: 700,
+    apata: 200,
+    sango: 300,
+  },
+  newGarage: {
+    bashorun: 500,
+    challenge: 200,
+    gate: 300,
+    "iyana-church": 600,
+    iworoad: 400,
+    "apata": 200,
+    moniya: 400,
+    dugbe: 350,
+    akobo: 500,
+    olodo: 650,
+    olorunda: 700,
+    mokola: 200,
+    sango: 300,
+  },
+  bashorun: {
+    apata: 500,
+    challenge: 200,
+    gate: 300,
+    "iyana-church": 600,
+    iworoad: 400,
+    "new garage": 200,
+    moniya: 400,
+    dugbe: 350,
+    akobo: 500,
+    olodo: 650,
+    olorunda: 700,
+    mokola: 200,
+    sango: 300,
+  },
+  gate: {
+    bashorun: 500,
+    challenge: 200,
+    apata: 300,
+    "iyana-church": 600,
+    iworoad: 400,
+    "new garage": 200,
+    moniya: 400,
+    dugbe: 350,
+    akobo: 500,
+    olodo: 650,
+    olorunda: 700,
+    mokola: 200,
+    sango: 300,
+  },
+  iworoad: {
+    bashorun: 500,
+    challenge: 200,
+    gate: 300,
+    "iyana-church": 600,
+    "new garage": 200,
+    moniya: 400,
+    dugbe: 350,
+    akobo: 500,
+    olodo: 650,
+    olorunda: 700,
+    mokola: 200,
+    sango: 300,
+  },
+  dugbe: {
+    bashorun: 500,
+    challenge: 200,
+    gate: 300,
+    "iyana-church": 600,
+    iworoad: 400,
+    "new garage": 200,
+    moniya: 400,
+    apata: 350,
+    akobo: 500,
+    olodo: 650,
+    olorunda: 700,
+    mokola: 200,
+    sango: 300,
+  },
+  akobo: {
+    bashorun: 500,
+    challenge: 200,
+    gate: 300,
+    "iyana-church": 600,
+    iworoad: 400,
+    "new garage": 200,
+    moniya: 400,
+    dugbe: 350,
+    apata: 500,
+    olodo: 650,
+    olorunda: 700,
+    mokola: 200,
+    sango: 300,
+  },
+  sango: {
+    bashorun: 500,
+    challenge: 200,
+    gate: 300,
+    "iyana-church": 600,
+    iworoad: 400,
+    "new garage": 200,
+    moniya: 400,
+    dugbe: 350,
+    akobo: 500,
+    olodo: 650,
+    olorunda: 700,
+    mokola: 200,
+    apata: 300,
+  },
+  // Add other price data here...
 };
 
+// A set to keep track of booked seats
 const bookedSeats = new Set();
 
 const Book = () => {
+  // State variables for form fields and error handling
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [price, setPrice] = useState("Price: Not available");
@@ -31,8 +154,10 @@ const Book = () => {
   const [time, setTime] = useState("");
   const [error, setError] = useState(null);
 
+  const { token } = useToken(); // Use the token from the context
   const navigate = useNavigate();
 
+  // Calculate the price based on selected locations
   useEffect(() => {
     if (from && to) {
       const calculatedPrice = prices[from]?.[to] || prices[to]?.[from];
@@ -42,15 +167,18 @@ const Book = () => {
     }
   }, [from, to]);
 
+  // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError(null); // Reset error state
 
+    // Check if the seat is already booked
     if (bookedSeats.has(seatNumber)) {
       setError("This seat is already booked. Please choose another seat.");
       return;
     }
 
+    // Create an object with booking details
     const bookingDetails = {
       bookingfrom: from,
       bookingto: to,
@@ -61,28 +189,30 @@ const Book = () => {
     };
 
     try {
+      // Make a POST request to the booking API
       const response = await fetch("https://pi-drive-1.onrender.com/booking", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkYW1zZWxyYXR0dXNzQGdtYWlsLmNvbSIsImV4cCI6MTcyMzY5MzU4NH0.xa0jToVXgwIn1_q4YOCPi3QKyg1PgiyqIJyOBIJhj1s`,
+          Authorization: token ? `Bearer ${token}` : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzYW1AZ21haWwuY29tIiwiZXhwIjoxNzIzNzQ4ODgwfQ.ru90r-QfiOUc99xLR7pturcX7N-Rvo-RGzckH5U-Vuo", // Use the token from the context
         },
         body: JSON.stringify(bookingDetails),
       });
 
       if (response.ok) {
-        bookedSeats.add(seatNumber); // Mark seat as booked
-        navigate("/payment"); // Redirect to payment page
+        // If the booking is successful, mark the seat as booked
+        bookedSeats.add(seatNumber);
+        navigate("/payment"); // Redirect to the payment page
       } else {
+        // If the booking fails, show the error message
         const errorData = await response.json();
-        setError(errorData.message || "Booking failed. Please try again.");
+        setError(errorData.message || "An Error has been identified, kindly wait!.");
       }
     } catch (error) {
       console.error("Error during booking:", error);
-      setError("An error occurred. Please try again later.");
+      setError("An error occured, try again later.");
     }
   };
-
 
   return (
     <div className="container mt-10 flex flex-col h-screen w-screen laptop:ml-10 laptop:items-left laptop:justify-left">
@@ -109,16 +239,14 @@ const Book = () => {
             <option value="bashorun">Bashorun</option>
             <option value="challenge">Challenge</option>
             <option value="gate">Gate</option>
-            <option value="iyana-church">Iyana-Church</option>
             <option value="iworoad">Iwo-Road</option>
             <option value="new garage">New Garage</option>
             <option value="moniya">Moniya</option>
             <option value="dugbe">Dugbe</option>
-            <option value="ojurin">Ojurin</option>
-            <option value="olodo">Olodo</option>
-            <option value="olorunda">Olorunda</option>
             <option value="mokola">Mokola</option>
             <option value="sango">Sango</option>
+
+
           </select>
         </div>
         <div className="form-group mb-4">
@@ -190,6 +318,8 @@ const Book = () => {
             ))}
           </select>
         </div>
+
+
         <div className="form-group mb-4">
           <label htmlFor="price-label" className="font-semibold text-lg leading-5">Price</label>
           <input
@@ -206,7 +336,9 @@ const Book = () => {
             type="submit"
             className="proceed-button bg-blue-500 font-bold text-white p-2 rounded laptop:w-[302px] tablet:w-[302px] border-[#1877F2] text-[#478ECC]"
           >
-            Book Now
+            <NavLink to='/payment'>  Book Now
+            </NavLink>
+           
           </button>
           <NavLink className="form-buttons flex justify-between" to="/welcomePage">
             <button

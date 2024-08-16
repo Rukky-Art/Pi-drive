@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { TokenContext } from '../context/TokenContext';
 import image10 from '../assets/images/image10.jpg';
 
 function SignIn() {
@@ -7,8 +8,9 @@ function SignIn() {
     const [password, setPassword] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
-    const [showPassword, setShowPassword] = useState(false); // State to manage password visibility
+    const [showPassword, setShowPassword] = useState(false);
 
+    const { setToken } = useContext(TokenContext); // Access setToken from TokenContext
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -26,8 +28,9 @@ function SignIn() {
 
                     if (response.ok) {
                         const data = await response.json();
+                        setToken(data.token);  // Store the token in context
                         console.log('Sign-in successful:', data);
-                        navigate('/welcomepage');
+                        navigate('/book');
                     } else {
                         const errorData = await response.json();
                         setError(errorData.message || 'Sign-in failed');
@@ -42,7 +45,7 @@ function SignIn() {
         };
 
         signIn();
-    }, [isSubmitting, email, password, navigate]);
+    }, [isSubmitting, email, password, navigate, setToken]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -69,7 +72,6 @@ function SignIn() {
                             />
                         </div>
 
-                        
                         <div className="mb-4 relative">
                             <label className="block text-gray-700 mb-2" htmlFor="password">Password</label>
                             <div className="relative">
@@ -78,7 +80,7 @@ function SignIn() {
                                     id="password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 pr-10" // Add padding to the right for the icon
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 pr-10"
                                 />
                                 <button
                                     type="button"
@@ -119,24 +121,22 @@ function SignIn() {
                                 </button>
                             </div>
                         </div>
+
                         <div className="mb-4">
                             <Link to="/forget" className="text-sm text-blue-500 hover:underline">Forgot password?</Link>
                         </div>
+
                         <div className="mb-6">
-                            <button type="submit" className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:bg-blue-700">Sign In</button>
+                            <button type="submit" className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:bg-blue-700">
+                                Sign In
+                            </button>
                         </div>
                     </form>
+
                     <div className="mb-6">
                         <p className="text-sm">Don't have an account?
-                            <Link to="/signup" className="text-blue-500 hover:underline"> Sign up</Link>
+                            <Link to="/signup" className="text-blue-500 hover:underline ml-2">Sign up</Link>
                         </p>
-                    </div>
-                    <div className="mt-6">
-                        <p className="text-lg font-semibold text-gray-700 mb-2">Why sign up for PI-Drive?</p>
-                        <ul className="list-disc pl-5 text-gray-700">
-                            <li className="mb-2">Manage your booking</li>
-                            <li>Get exclusive deals and offers</li>
-                        </ul>
                     </div>
                 </div>
             </div>
